@@ -15,10 +15,10 @@ class BucketlistController extends Controller
     public function index(Request $request)
     {
         // ユーザーIDが指定されている場合、指定されたユーザーのリストを取得
-        $user = $request->user(); // Firebase認証でのユーザー情報取得（仮）
+        // $user = $request->user(); // Firebase認証でのユーザー情報取得（仮）
         
-        $bucketlists = $user->bucketlists()->get(); // ユーザーに関連するバケットリストを取得
-        
+        // $bucketlists = $user->bucketlists()->get(); // ユーザーに関連するバケットリストを取得
+        $bucketlists = Bucketlist::all(); // 仮のバケットリスト取得
         return response()->json($bucketlists);
     }
 
