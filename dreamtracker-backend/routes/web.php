@@ -7,3 +7,4 @@ Route::get('/', function () {
 });
 
 Route::prefix('api')->group(base_path('routes/api.php'));
+
