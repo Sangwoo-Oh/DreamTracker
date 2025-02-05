@@ -79,7 +79,9 @@ class FirebaseUserController extends Controller
 
         try {
             $verifiedIdToken = $this->auth->verifyIdToken($idToken);
-            return response()->json($verifiedIdToken);
+            $uid = $verifiedIdToken->claims()->get('sub');
+            $user = $this->auth->getUser($uid);
+            return response()->json($user);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
