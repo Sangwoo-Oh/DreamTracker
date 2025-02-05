@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { auth, signInWithEmailAndPassword } from "./services/auth/firebase";
+import { useEffect, useState } from "react";
+// import { auth, signInWithEmailAndPassword } from "./services/auth/firebase";
 import { useNavigate } from "react-router";
+import { getAllUsers, signInWithEmailAndPassword } from "./services/auth/auth.service";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,8 +16,8 @@ const Login = () => {
     setError("");
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log("User Logged In:", userCredential.user);
+      const response = await signInWithEmailAndPassword(email, password);
+      // console.log("User Logged In:", response);
       // alert("Login successful!");
       navigate("/");
     } catch (error: unknown) {
