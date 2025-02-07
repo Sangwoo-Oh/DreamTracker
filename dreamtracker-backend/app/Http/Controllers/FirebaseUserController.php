@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Auth\UserQuery;
+use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+
 
 class FirebaseUserController extends Controller
 {
@@ -64,6 +66,18 @@ class FirebaseUserController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function logoutUser(Request $request) {
+        $idToken = $request->bearerToken();
+        $uid = $this->auth->verifyIdToken($idToken)->claims()->get('sub');
+        $this->auth->revokeRefreshTokens($uid);
+        try {
+            $verifiedIdToken = $this->auth->verifyIdToken($idToken, $checkIfRevoked = true);
+        } catch (RevokedIdToken $e) {
+            echo $e->getMessage();
+        }
+        return response()->json(['message' => 'Logout successful']);
     }
 
     /**

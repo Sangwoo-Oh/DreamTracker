@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 // import { auth, signInWithEmailAndPassword } from "./services/auth/firebase";
 import { useNavigate } from "react-router";
 import { getAllUsers, signInWithEmailAndPassword } from "./services/auth/auth.service";
+import { Button } from "@mui/material";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,9 +17,7 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await signInWithEmailAndPassword(email, password);
-      // console.log("User Logged In:", response);
-      // alert("Login successful!");
+      await signInWithEmailAndPassword(email, password);
       navigate("/");
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -34,8 +33,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+    <div className="flex justify-center items-center h-screen">
+      <div className="w-96">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
@@ -63,13 +62,32 @@ const Login = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-300"
-            disabled={loading}
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
+          <div className="flex gap-2 justify-center">
+            <Button
+              fullWidth={true}
+              variant="outlined"
+              color="primary"
+              href="/signup"
+            >
+              Sign up
+            </Button>
+            <Button
+              fullWidth={true}
+              variant="contained"
+              color="primary"
+              disabled={loading}
+              type="submit"
+            >
+              {loading ? "Logging in..." : "Login"}
+            </Button>
+            {/* <button
+              type="submit"
+              className="cursor-pointer w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-300"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button> */}
+          </div>
         </form>
       </div>
     </div>
