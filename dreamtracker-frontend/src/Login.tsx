@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 // import { auth, signInWithEmailAndPassword } from "./services/auth/firebase";
 import { useNavigate } from "react-router";
-import { getAllUsers, signInWithEmailAndPassword } from "./services/auth/auth.service";
+import {
+  getAllUsers,
+  signInWithEmailAndPassword,
+} from "./services/auth/auth.service";
 import { Button } from "@mui/material";
 
 const Login = () => {
@@ -11,7 +14,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e:any) => {
+  const handleLogin = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     setError("");
