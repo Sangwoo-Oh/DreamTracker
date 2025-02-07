@@ -83,13 +83,6 @@ const Login = () => {
             >
               {loading ? "Logging in..." : "Login"}
             </Button>
-            {/* <button
-              type="submit"
-              className="cursor-pointer w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-300"
-              disabled={loading}
-            >
-              {loading ? "Logging in..." : "Login"}
-            </button> */}
           </div>
         </form>
       </div>

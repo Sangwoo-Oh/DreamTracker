@@ -4,7 +4,7 @@ import SignUp from "./SignUp";
 
 import { Container } from "@mui/material";
 import HeaderTitle from "./Header";
-import DashBoard from "./DashBoard";
+import DashBoard from "./dashbord/DashBoard";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
         <Container maxWidth="xs" className="bg-white">
           {/* <HeaderTitle /> */}
           <Routes>
-            <Route index element={<DashBoard />} />
+            <Route path="/*" element={<DashBoard />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
           </Routes>
