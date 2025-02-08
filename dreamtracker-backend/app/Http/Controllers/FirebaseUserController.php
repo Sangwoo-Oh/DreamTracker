@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Auth\UserQuery;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
-
+use App\Models\User;
 
 class FirebaseUserController extends Controller
 {
@@ -38,9 +38,16 @@ class FirebaseUserController extends Controller
             'disabled' => $validatedData['disabled'] ?? false,
         ];
 
-        // Firebase にユーザーを作成
         try {
+            // Firebase にユーザーを作成
             $createdUser = $this->auth->createUser($userProperties);
+
+            // PostgreSql にユーザーを作成
+            $user = new User();
+            $user->name = $validatedData['displayName'];
+            $user->firebase_id = $createdUser->uid;
+            $user->save();
+
             return response()->json($createdUser);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

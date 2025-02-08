@@ -15,8 +15,8 @@ class UserSeeder extends Seeder
     {
         // サンプルユーザーを作成
         User::create([
-            'name' => 'John Doe',
-            'firebase_id' => '1234567890',
+            'name' => 'sangwoo1013',
+            'firebase_id' => 'I03ujKEauqVsDVUOv0iUcv4v5z92',
         ]);
     }
 }
