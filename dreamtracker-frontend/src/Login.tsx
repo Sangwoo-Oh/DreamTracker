@@ -1,10 +1,6 @@
-import { useEffect, useState } from "react";
-// import { auth, signInWithEmailAndPassword } from "./services/auth/firebase";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-import {
-  getAllUsers,
-  signInWithEmailAndPassword,
-} from "./services/auth/auth.service";
+import { signInWithEmailAndPassword } from "./services/auth/auth.service";
 import { Button } from "@mui/material";
 
 const Login = () => {

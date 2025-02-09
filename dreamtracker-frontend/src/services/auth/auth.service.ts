@@ -95,6 +95,38 @@ export const authGuard = () => {
   return true;
 };
 
+export const createUserWithEmailAndPassword = async (
+  displayName: string,
+  email: string,
+  password: string,
+) => {
+  try {
+    // get csrf-token
+    await fetch(`${URL}/sanctum/csrf-cookie`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const response = await fetch(`${URL}/api/signup`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+      },
+      body: JSON.stringify({ email, password, displayName }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Sign up Error:", error.message);
+    } else {
+      console.error("Unexpected error", error);
+    }
+  }
+};
+
 export const signOut = async () => {
   try {
     await fetch(`${URL}/api/logout`, {
