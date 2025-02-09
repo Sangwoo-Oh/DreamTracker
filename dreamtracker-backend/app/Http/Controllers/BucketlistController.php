@@ -30,9 +30,8 @@ class BucketlistController extends Controller
         // バリデーション
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
-            'progress' => 'required|integer|min:0|max:100',
             'is_public' => 'boolean',
+            'is_achieved' => 'boolean',
             'likes' => 'nullable|integer',
         ]);
 
@@ -42,12 +41,11 @@ class BucketlistController extends Controller
 
         // 新しいバケットリストを作成
         $bucketlist = Bucketlist::create([
-            'user_id' => $request->user()->id,  // Firebase認証されたユーザーIDを使用
+            'user_id' => $request->input('user_id'),
             'title' => $request->title,
-            'category' => $request->category,
-            'progress' => $request->progress,
-            'is_public' => $request->is_public ?? false,  // デフォルトで公開しない
-            'likes' => $request->likes ?? 0,  // デフォルトでいいねは0
+            'is_public' => $request->is_public ?? false,
+            'is_achieved' => $request->is_achieved ?? false,
+            'likes' => $request->likes ?? 0,
         ]);
 
         return response()->json($bucketlist, 201);
