@@ -64,7 +64,7 @@ class BucketlistControllerTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $idToken,
             'Accept' => 'application/json',
-        ])->getJson('/api/bucketlists');
+        ])->getJson('/api/bucketlist');
 
         // Assert
         // バケットリストアイテムが取得できたことを確認
@@ -109,12 +109,12 @@ class BucketlistControllerTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $idToken,
             'Accept' => 'application/json',
-        ])->getJson('/api/bucketlists');
+        ])->getJson('/api/bucketlist');
 
         // Assert
         // バケットリストアイテムが取得できたことを確認
         $response->assertStatus(200);
-        dump($response);
+        // dump($response);
         $response->assertJson([
             [
                 'title' => 'test bucket list item',
