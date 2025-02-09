@@ -1,11 +1,17 @@
 import { useState } from "react";
-import { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "./services/auth/firebase";
-
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "./services/auth/auth.service";
+import { useNavigate } from "react-router";
 const SignUp = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -13,9 +19,22 @@ const SignUp = () => {
     setError("");
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User Created:", userCredential.user);
-      alert("Sign-up successful!");
+      if (password !== password2) {
+        setError("Passwords do not match.");
+        setLoading(false);
+        return;
+      }
+
+      const userCredential = await createUserWithEmailAndPassword(
+        name,
+        email,
+        password
+      )
+
+      console.log("User Created:", userCredential);
+      await signInWithEmailAndPassword(email, password);
+      navigate("/");
+
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error("Sign up Error:", error.message);
@@ -30,13 +49,24 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+    <div className="flex justify-center items-center h-screen">
+      <div className="w-96">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign up</h2>
 
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
         <form onSubmit={handleSignUp} className="space-y-4">
+          <div>
+            <label className="block text-gray-700">Name</label>
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+
           <div>
             <label className="block text-gray-700">Email</label>
             <input
@@ -55,6 +85,17 @@ const SignUp = () => {
               className="w-full p-2 border border-gray-300 rounded mt-1"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700">Password {"(confirm)"}</label>
+            <input
+              type="password"
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+              value={password2}
+              onChange={(e) => setPassword2(e.target.value)}
               required
             />
           </div>

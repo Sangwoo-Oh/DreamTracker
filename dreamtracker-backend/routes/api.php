@@ -2,10 +2,6 @@
 use App\Http\Controllers\BucketlistController;
 use App\Http\Controllers\FirebaseUserController;
 
-Route::get('/csrf-token', function() {
-    return response()->json(['csrf_token' => csrf_token()]);
-});
-
 Route::get('/hello', function () {
     return response()->json(['message' => 'Hello']);
 });
@@ -14,6 +10,7 @@ Route::get('/users',[FirebaseUserController::class, 'getAllUsers']);
 Route::post('/signup',[FirebaseUserController::class, 'createUser']);
 Route::post('/login',[FirebaseUserController::class, 'authenticateUser']);
 Route::post('/verify',[FirebaseUserController::class, 'verifyIdToken']);
+Route::post('/logout',[FirebaseUserController::class, 'logoutUser']);
 // バケットリスト取得
 Route::get('/bucketlists', [BucketlistController::class, 'index']);
 
