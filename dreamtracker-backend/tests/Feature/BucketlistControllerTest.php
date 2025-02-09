@@ -11,11 +11,13 @@ use Kreait\Laravel\Firebase\Facades\Firebase;
 class BucketlistControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * バケットリストアイテムを新規作成する
      */
     public function test_create_a_new_bucket_list_item(): void
     {
+
         // Arrange
         // Firebaseでテストユーザーを作成
         $response = $this->post('/api/signup', [
@@ -32,7 +34,6 @@ class BucketlistControllerTest extends TestCase
         ]);
         $idToken = $response->getContent();
         $idToken = trim($idToken, '"');
-        dump($idToken);
 
         // Act
         // テストユーザーでバケットリストアイテムを作成
