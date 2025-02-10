@@ -14,11 +14,14 @@ class BucketlistController extends Controller
      */
     public function index(Request $request)
     {
-        // ユーザーIDが指定されている場合、指定されたユーザーのリストを取得
-        // $user = $request->user(); // Firebase認証でのユーザー情報取得（仮）
-        
-        // $bucketlists = $user->bucketlists()->get(); // ユーザーに関連するバケットリストを取得
-        $bucketlists = Bucketlist::all(); // 仮のバケットリスト取得
+        $user_id = $request->input('user_id');
+        $user = User::find($user_id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $bucketlists = $user->bucketlists()->get();
         return response()->json($bucketlists);
     }
 
@@ -30,9 +33,8 @@ class BucketlistController extends Controller
         // バリデーション
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
-            'progress' => 'required|integer|min:0|max:100',
             'is_public' => 'boolean',
+            'is_achieved' => 'boolean',
             'likes' => 'nullable|integer',
         ]);
 
@@ -42,12 +44,11 @@ class BucketlistController extends Controller
 
         // 新しいバケットリストを作成
         $bucketlist = Bucketlist::create([
-            'user_id' => $request->user()->id,  // Firebase認証されたユーザーIDを使用
+            'user_id' => $request->input('user_id'),
             'title' => $request->title,
-            'category' => $request->category,
-            'progress' => $request->progress,
-            'is_public' => $request->is_public ?? false,  // デフォルトで公開しない
-            'likes' => $request->likes ?? 0,  // デフォルトでいいねは0
+            'is_public' => $request->is_public ?? false,
+            'is_achieved' => $request->is_achieved ?? false,
+            'likes' => $request->likes ?? 0,
         ]);
 
         return response()->json($bucketlist, 201);
@@ -60,10 +61,9 @@ class BucketlistController extends Controller
     {
         // バリデーション
         $validator = Validator::make($request->all(), [
-            'title' => 'nullable|string|max:255',
-            'category' => 'nullable|string|max:255',
-            'progress' => 'nullable|integer|min:0|max:100',
-            'is_public' => 'nullable|boolean',
+            'title' => 'required|string|max:255',
+            'is_public' => 'boolean',
+            'is_achieved' => 'boolean',
             'likes' => 'nullable|integer',
         ]);
 
@@ -80,9 +80,8 @@ class BucketlistController extends Controller
         // 更新
         $bucketlist->update($request->only([
             'title',
-            'category',
-            'progress',
             'is_public',
+            'is_achieved',
             'likes',
         ]));
 

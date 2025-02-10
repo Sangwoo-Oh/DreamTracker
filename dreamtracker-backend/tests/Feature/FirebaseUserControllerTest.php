@@ -10,13 +10,14 @@ use Kreait\Laravel\Firebase\Facades\Firebase;
 class FirebaseUserControllerTest extends TestCase
 {
     use WithFaker;
-    use RefreshDatabase;
+    // use RefreshDatabase;
 
     /**
      * A basic feature test example.
      */
     public function test_create_a_user(): void
     {
+
 
         // Firebaseでユーザーを作成する
         $response = $this->post('/api/signup', [

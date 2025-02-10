@@ -16,13 +16,13 @@ class Bucketlist extends Model
     protected $fillable = [
         'user_id',
         'title',
-        'category',
-        'progress',
+        'is_achieved',
         'is_public',
         'likes',
     ];
 
     protected $casts = [
         'is_public' => 'boolean',
+        'is_achieved' => 'boolean',
     ];
 }
