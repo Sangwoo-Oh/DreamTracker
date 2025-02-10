@@ -1,38 +1,18 @@
 import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router";
 import { verifyToken, signOut } from "../services/auth/auth.service";
-import { Box, Button, CircularProgress, Paper, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography, TextField, List, ListItem } from "@mui/material";
 import DashBoardMenu from "./DashBoardMenu";
 import DashBoardList from "./DashBoardList";
-
-const mockData = [
-  {
-    title: "Travel to Paris",
-    category: "Travel",
-    progress: 100,
-    is_public: true,
-    likes: 100,
-  },
-  {
-    title: "Learn to code",
-    category: "Education",
-    progress: 50,
-    is_public: true,
-    likes: 50,
-  },
-  {
-    title: "Start a business",
-    category: "Business",
-    progress: 10,
-    is_public: false,
-    likes: 10,
-  },
-]
+import AddGoal from "./AddGoal";
+import { getBucketListItems } from "../services/bucketlist/bucketlist.service";
 
 export default function DashBoard() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [itemsLoading, setItemsLoading] = useState(true);
   const navigate = useNavigate();
+  const [listItems, setListItems] = useState<any[]>([]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -53,11 +33,32 @@ export default function DashBoard() {
     checkAuth();
   }, [navigate]);
 
+  useEffect(() => {
+    const fetchBucketListItems = async () => {
+      try {
+        const data = await getBucketListItems();
+        setListItems(data);
+        console.log(data);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error("FetchBucketListItems Error:", error.message);
+        } else {
+          console.error("Unexpected error", error);
+        }
+      } finally {
+        setItemsLoading(false);
+      }
+    };
+
+    fetchBucketListItems();
+  }, []);
+
   const handleSignOut = () => {
     signOut()
       .then(() => {
         console.log("User signed out");
         setUser(null);
+        navigate("/login");
       })
       .catch((error) => {
         console.error("Error signing out:", error);
@@ -78,25 +79,39 @@ export default function DashBoard() {
         <h2 className="text-2xl font-bold mb-6 text-center">Dashboard</h2>
         <Box>
           <Box className="mb-10">
-            <Typography variant="h5">Welcome, {user?.email}</Typography>
+            <Typography variant="h5">Welcome, {user?.displayName}</Typography>
           </Box>
 
           <Box className="mb-6">
-            <Box className="mb-6">
-              <Button fullWidth variant="contained" color="primary">
-                Add New Goals
-              </Button>
-            </Box>
+            <AddGoal goals={listItems} setListItems={setListItems}/>
+
             <Box className="mb-6">
               <Typography fontWeight={"fontWeightBold"} variant="h6" className="font-semibold">
                 Bucketlist Summary
               </Typography>
             </Box>
-            <Routes>
+
+            {/* <Routes>
               <Route path="/" element={<DashBoardMenu user={user}/>} />
               <Route path="/completed-goals" element={<DashBoardList goals={mockData}/>} />
-              {/* <Route path="/total-goals" element={<DashBoardList type="total"/>} /> */}
-            </Routes>
+              <Route path="/total-goals" element={<DashBoardList type="total"/>} />
+            </Routes> */}
+
+            {itemsLoading ? (
+              <div className="flex justify-center items-center h-40">
+                <CircularProgress />
+              </div>
+            ) : (
+              <List>
+                {listItems.map((goal) => (
+                  <ListItem key={goal.id} className="mb-3">
+                    <Box className="flex items-center justify-between">
+                      <Typography fontWeight={"fontWeightBold"}>{goal.title}</Typography>
+                    </Box>
+                  </ListItem>
+                ))}
+              </List>
+            )}
           </Box>
         </Box>
 

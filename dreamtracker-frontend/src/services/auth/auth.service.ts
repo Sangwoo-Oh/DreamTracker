@@ -1,8 +1,8 @@
-const URL = "http://localhost:8000";
+import { getCookie, fetchCsrfToken} from "../utils/csrftoken";
 
 export const getAllUsers = async () => {
   try {
-    const response = await fetch(`${URL}/users`, {
+    const response = await fetch(`${import.meta.env.VITE_APP_URL}/users`, {
       method: "GET",
     });
     return response.json();
@@ -20,13 +20,9 @@ export const signInWithEmailAndPassword = async (
   password: string
 ) => {
   try {
-    // get csrf-token
-    await fetch(`${URL}/sanctum/csrf-cookie`, {
-      method: "GET",
-      credentials: "include",
-    });
+    fetchCsrfToken();
 
-    const response = await fetch(`${URL}/api/login`, {
+    const response = await fetch(`${import.meta.env.VITE_APP_URL}/api/login`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -56,7 +52,7 @@ export const verifyToken = async () => {
       throw new Error("No ID token found in localStorage");
     }
 
-    const response = await fetch(`${URL}/api/verify`, {
+    const response = await fetch(`${import.meta.env.VITE_APP_URL}/api/verify`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -102,12 +98,9 @@ export const createUserWithEmailAndPassword = async (
 ) => {
   try {
     // get csrf-token
-    await fetch(`${URL}/sanctum/csrf-cookie`, {
-      method: "GET",
-      credentials: "include",
-    });
+    fetchCsrfToken();
 
-    const response = await fetch(`${URL}/api/signup`, {
+    const response = await fetch(`${import.meta.env.VITE_APP_URL}/api/signup`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -129,13 +122,13 @@ export const createUserWithEmailAndPassword = async (
 
 export const signOut = async () => {
   try {
-    await fetch(`${URL}/api/logout`, {
+    await fetch(`${import.meta.env.VITE_APP_URL}/api/logout`, {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
         "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-        Authorization: `Bearer ${localStorage.getItem("idToken")}`,
+        "Authorization": `Bearer ${localStorage.getItem("idToken")}`,
       },
     });
     localStorage.removeItem("idToken");
@@ -147,15 +140,3 @@ export const signOut = async () => {
     }
   }
 };
-
-// Helper function to read cookies
-function getCookie(name: any) {
-  const cookies = document.cookie.split("; ");
-  for (let cookie of cookies) {
-    const [cookieName, cookieValue] = cookie.split("=");
-    if (cookieName === name) {
-      return decodeURIComponent(cookieValue);
-    }
-  }
-  return "";
-}

@@ -13,7 +13,6 @@ export default function DashBoardMenu({user}: DashBoardMenuProps) {
     const navigate = useNavigate();
     return (
         <>
-            <p>{user.email}</p>
             <Box className="mb-3" onClick={() => navigate("/completed-goals")}>
               <Typography fontWeight={"fontWeightBold"}  className="cursor-pointer hover:underline">
                 <CheckCircleOutlineIcon />

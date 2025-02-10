@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 interface DashBoardListProps {
   goals: { 
     title: string;
-    category: string;
     progress: number;
     is_public: boolean;
     likes: number;
