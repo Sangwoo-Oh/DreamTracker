@@ -20,7 +20,7 @@ export default function AddGoal({goals, setListItems}: AddGoalProps) {
 
         try {
             const data = await createBucketListItem(newGoal);
-            setListItems([...goals, data]);
+            setListItems([data, ...goals]);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 console.error("AddGoal Error:", error.message);

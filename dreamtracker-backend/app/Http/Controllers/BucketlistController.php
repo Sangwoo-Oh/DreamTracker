@@ -21,7 +21,7 @@ class BucketlistController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        $bucketlists = $user->bucketlists()->get();
+        $bucketlists = $user->bucketlists()->orderBy('created_at', 'desc')->get();
         return response()->json($bucketlists);
     }
 
