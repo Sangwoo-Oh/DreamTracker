@@ -51,7 +51,7 @@ export default function DashBoard() {
     };
 
     fetchBucketListItems();
-  }, []);
+  }, [setListItems]);
 
   const handleSignOut = () => {
     signOut()
@@ -102,15 +102,7 @@ export default function DashBoard() {
                 <CircularProgress />
               </div>
             ) : (
-              <List>
-                {listItems.map((goal) => (
-                  <ListItem key={goal.id} className="mb-3">
-                    <Box className="flex items-center justify-between">
-                      <Typography fontWeight={"fontWeightBold"}>{goal.title}</Typography>
-                    </Box>
-                  </ListItem>
-                ))}
-              </List>
+              <DashBoardList goals={listItems} setListItems={setListItems}/>
             )}
           </Box>
         </Box>

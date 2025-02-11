@@ -14,7 +14,7 @@ interface AddGoalProps {
   }
 
 export default function AddGoal({goals, setListItems}: AddGoalProps) {
-    const [newGoal, setNewGoal] = useState("");
+    const [newGoal, setNewGoal] = useState(""); 
 
     const handleAddGoal = async () => {
 
@@ -36,8 +36,8 @@ export default function AddGoal({goals, setListItems}: AddGoalProps) {
     return (
         <>
             <Box className="mb-6">
-              <TextField value={newGoal} onChange={e=>setNewGoal(e.target.value)} className="!mb-5" label="New goal" variant="outlined" fullWidth />
-              <Button onClick={handleAddGoal} fullWidth variant="contained" color="primary">
+              <TextField value={newGoal} onChange={e=>{setNewGoal(e.target.value);}} className="!mb-5" label="New goal" variant="outlined" fullWidth />
+              <Button onClick={handleAddGoal} fullWidth variant="contained" color="primary" disabled={newGoal === ""}>
                 Add New Goals
               </Button>
             </Box>

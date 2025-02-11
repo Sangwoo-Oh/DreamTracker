@@ -23,7 +23,6 @@ export const getBucketListItems = async () => {
     }
 }
 
-
 export const createBucketListItem = async (title: string) => {
     try {
         fetchCsrfToken();
@@ -43,6 +42,29 @@ export const createBucketListItem = async (title: string) => {
     } catch (error : unknown) {
         if (error instanceof Error) {
             console.error("CreateBucketListItem Error:", error.message);
+        } else {
+            console.error("Unexpected error", error);
+        }
+    }
+}
+
+export const deleteBucketListItem = async (id: number) => {
+    try {
+        fetchCsrfToken();
+
+        const response = await fetch(`${import.meta.env.VITE_APP_URL}/api/bucketlist/${id}`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+                "Authorization": `Bearer ${localStorage.getItem("idToken")}`,
+            },
+        });
+        return response.json();
+    } catch (error : unknown) {
+        if (error instanceof Error) {
+            console.error("DeleteBucketListItem Error:", error.message);
         } else {
             console.error("Unexpected error", error);
         }
