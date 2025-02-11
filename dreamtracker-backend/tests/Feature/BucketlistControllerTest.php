@@ -166,13 +166,111 @@ class BucketlistControllerTest extends TestCase
 
         // Assert
         // バケットリストアイテムが更新されたことを確認
-        
+
         $response->assertStatus(200);
         $response->assertJson([
             'title' => 'updated bucket list item',
             'is_public' => true,
             'is_achieved' => true,
             'likes' => 1,
+        ]);
+    }
+
+    /**
+     * バケットリストアイテムを部分的に更新する
+     */
+    public function test_partially_update_bucket_list_item(): void
+    {
+
+        // Arrange
+        // テストユーザーでログイン
+        $response = $this->post('/api/login', [
+            'email' => 'test@test.com',
+            'password' => 'passtest',
+        ]);
+        $idToken = $response->getContent();
+        $idToken = trim($idToken, '"');
+
+        // テストアイテムを作成
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $idToken,
+            'Accept' => 'application/json',
+        ])->postJson('/api/bucketlist', [
+            'title' => 'test bucket list item',
+            'is_public' => false,
+            'is_achieved' => false,
+            'likes' => 0,
+        ]);
+
+        $item_id = $response->json('id');
+
+        // Act
+        // 1. バケットリストアイテムを更新
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $idToken,
+            'Accept' => 'application/json',
+        ])->patchJson('/api/bucketlist/' . $item_id, [
+            'title' => 'partially updated bucket list item',
+        ]);
+
+        // Assert
+        // バケットリストアイテムが更新されたことを確認
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'title' => 'partially updated bucket list item',
+            'is_public' => false,
+            'is_achieved' => false,
+            'likes' => 0,
+        ]);
+    }
+
+    /**
+     * バケットリストアイテムを完了ステータスにする
+     */
+    public function test_achieve_bucket_list_item(): void
+    {
+
+        // Arrange
+        // テストユーザーでログイン
+        $response = $this->post('/api/login', [
+            'email' => 'test@test.com',
+            'password' => 'passtest',
+        ]);
+        $idToken = $response->getContent();
+        $idToken = trim($idToken, '"');
+
+        // テストアイテムを作成
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $idToken,
+            'Accept' => 'application/json',
+        ])->postJson('/api/bucketlist', [
+            'title' => 'test bucket list item',
+            'is_public' => false,
+            'is_achieved' => false,
+            'likes' => 0,
+        ]);
+
+        $item_id = $response->json('id');
+
+        // Act
+        // 1. バケットリストアイテムを更新
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $idToken,
+            'Accept' => 'application/json',
+        ])->patchJson('/api/bucketlist/' . $item_id, [
+            'is_achieved' => true,
+        ]);
+
+        // Assert
+        // バケットリストアイテムが更新されたことを確認
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'title' => 'test bucket list item',
+            'is_public' => false,
+            'is_achieved' => true,
+            'likes' => 0,
         ]);
     }
     /**

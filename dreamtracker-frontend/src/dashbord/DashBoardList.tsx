@@ -1,14 +1,22 @@
 import {
   Box,
+  Checkbox,
   CircularProgress,
   IconButton,
   List,
   ListItem,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { deleteBucketListItem } from "../services/bucketlist/bucketlist.service";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import {
+  deleteBucketListItem,
+  updateBucketListItemAchieved,
+  updateBucketListItemTitle,
+} from "../services/bucketlist/bucketlist.service";
 import { useState } from "react";
 
 interface DashBoardListProps {
@@ -64,6 +72,8 @@ interface DashBoardListItemProps {
 }
 function DashBoardListItem(props: DashBoardListItemProps) {
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editGoal, setEditGoal] = useState(props.goal.title);
 
   const handleDelete = async (id: number) => {
     try {
@@ -80,20 +90,93 @@ function DashBoardListItem(props: DashBoardListItemProps) {
     }
   };
 
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      await updateBucketListItemTitle(props.goal.id, editGoal);
+      props.setListItems(
+        props.goals.map((goal) => {
+          if (goal.id === props.goal.id) goal.title = editGoal;
+          return goal;
+        })
+      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("UpdateBucketListItem Error:", error.message);
+      } else {
+        console.error("Unexpected error", error);
+      }
+    } finally {
+      setIsEditing(false);
+    }
+  };
+
+  const onToggleAchieved = async (id: number) => {
+    try {
+      await updateBucketListItemAchieved(id, !props.goal.is_achieved);
+      props.setListItems(
+        props.goals.map((goal) => {
+          if (goal.id === id) goal.is_achieved = !goal.is_achieved;
+          return goal;
+        })
+      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("UpdateBucketListItemAchieved Error:", error.message);
+      } else {
+        console.error("Unexpected error", error);
+      }
+    }
+  };
   return (
     <>
       <ListItem className="mb-3">
-        <Box className="flex items-center justify-between">
-          <Typography fontWeight={"fontWeightBold"}>
-            {props.goal.title}
-          </Typography>
-        </Box>
+        <Checkbox
+          onChange={() => onToggleAchieved(props.goal.id)}
+          checked={props.goal.is_achieved}
+        />
+        {isEditing ? (
+          <>
+            <TextField
+              fullWidth={true}
+              value={editGoal}
+              onChange={(e) => setEditGoal(e.target.value)}
+              sx={{
+                "& .MuiInputBase-input": {
+                  padding: "6px",
+                },
+              }}
+            />
+            <Tooltip title="Save">
+              <IconButton onClick={handleSaveClick} disabled={editGoal === ""}>
+                <SaveIcon />
+              </IconButton>
+            </Tooltip>
+          </>
+        ) : (
+          <>
+            <Box className="flex items-center justify-between">
+              <Typography fontWeight={"fontWeightBold"}>
+                {props.goal.title}
+              </Typography>
+            </Box>
+            <Tooltip title="Edit">
+              <IconButton onClick={handleEditClick}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          </>
+        )}
+
         {deleteLoading ? (
           <CircularProgress />
         ) : (
           <Tooltip title="Delete">
-            <IconButton>
-              <DeleteIcon onClick={() => handleDelete(props.goal.id)} />
+            <IconButton onClick={() => handleDelete(props.goal.id)}>
+              <DeleteIcon />
             </IconButton>
           </Tooltip>
         )}

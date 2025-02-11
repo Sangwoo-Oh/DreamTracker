@@ -1,6 +1,7 @@
 <?php
 use App\Http\Middleware\FirebaseAuthMiddleware;
 use App\Http\Controllers\BucketlistController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(FirebaseAuthMiddleware::class)->group(function () {
     Route::get('/', [BucketlistController::class, 'index']);

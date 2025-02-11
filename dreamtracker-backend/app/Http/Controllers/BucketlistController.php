@@ -61,11 +61,13 @@ class BucketlistController extends Controller
     {
         // バリデーション
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
+            'title' => 'string|max:255',
             'is_public' => 'boolean',
             'is_achieved' => 'boolean',
             'likes' => 'nullable|integer',
         ]);
+
+        dump($request->all());
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);

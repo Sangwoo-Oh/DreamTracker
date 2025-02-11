@@ -2,6 +2,7 @@
 use App\Http\Controllers\BucketlistController;
 use App\Http\Controllers\FirebaseUserController;
 use App\Http\Middleware\FirebaseAuthMiddleware;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/hello', function () {
     return response()->json(['message' => 'Hello']);
