@@ -83,7 +83,7 @@ export const updateBucketListItemTitle = async (id: number, title: string) => {
 
 export const updateBucketListItemAchieved = async (
   id: number,
-  is_achived: boolean
+  is_achieved: boolean
 ) => {
   try {
     fetchCsrfToken();
@@ -97,7 +97,7 @@ export const updateBucketListItemAchieved = async (
           "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
           Authorization: `Bearer ${localStorage.getItem("idToken")}`,
         },
-        body: JSON.stringify({ is_achived }),
+        body: JSON.stringify({ is_achieved }),
       }
     );
     return response.json();

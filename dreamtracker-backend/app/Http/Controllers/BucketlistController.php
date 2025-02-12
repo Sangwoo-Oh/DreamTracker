@@ -67,7 +67,7 @@ class BucketlistController extends Controller
             'likes' => 'nullable|integer',
         ]);
 
-        dump($request->all());
+        // dump($request->all());
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);

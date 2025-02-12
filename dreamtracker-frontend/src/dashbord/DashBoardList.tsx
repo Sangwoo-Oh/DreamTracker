@@ -116,7 +116,8 @@ function DashBoardListItem(props: DashBoardListItemProps) {
 
   const onToggleAchieved = async (id: number) => {
     try {
-      await updateBucketListItemAchieved(id, !props.goal.is_achieved);
+      const response = await updateBucketListItemAchieved(id, !props.goal.is_achieved);
+      // console.log(response);
       props.setListItems(
         props.goals.map((goal) => {
           if (goal.id === id) goal.is_achieved = !goal.is_achieved;
