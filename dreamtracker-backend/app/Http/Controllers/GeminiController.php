@@ -7,12 +7,26 @@ use Gemini\Laravel\Facades\Gemini;
 
 class GeminiController extends Controller
 {
-    function test_hello_gemini()
+    function getSuggestedItems(Request $request)
     {
-        $numberOfItems = 10;
-        $language = "Japanese";
-        $attributes = ["Male", "27 years old", "office worker", "married"];
-        $preferences = ["Outdoors", "socializing", "overseas travel"];
+        $numberOfItems = $request->input('numberOfItems');
+        $language = $request->input('language');
+        $attributes = $request->input('attributes');
+        $preferences = $request->input('preferences');
+
+        if ($numberOfItems == null || $numberOfItems == 0) {
+            return response()->json(['error' => 'numberOfItems is required']);
+        }
+        if ($language == null) {
+            return response()->json(['error' => 'language is required']);
+        }
+        if ($attributes == null || count($attributes) == 0) {
+            return response()->json(['error' => 'attributes is required']);
+        }
+        if ($preferences == null || count($preferences) == 0) {
+            return response()->json(['error' => 'preferences is required']);
+        }
+
         $prompt = 'Propose items to add to a Bucket list, based on the parameters (number, preferences) provided. Return only a JSON object in the response with no new lines. Make the Bucket list items as specific as possible, with high-resolution goals.'
             . "The JSON should have the following structure:"
             . '[{ "suggest_id" : <suggest_id>, "title": <title> }, { "suggest_id" : <suggest_id>, "title": <title> },... ]'
@@ -21,8 +35,6 @@ class GeminiController extends Controller
             . "\nOutput language: " . $language 
             . "\nAttributes: " . implode(", ", $attributes) 
             . "\nPreferences: " . implode(", ", $preferences);
-
-        // dump($prompt);
 
         $result = Gemini::geminiPro()->generateContent($prompt);
         $content = str_replace('```', '', $result->text());
