@@ -20,10 +20,10 @@ class GeminiController extends Controller
         if ($language == null) {
             return response()->json(['error' => 'language is required']);
         }
-        if ($attributes == null || count($attributes) == 0) {
+        if ($attributes == null) {
             return response()->json(['error' => 'attributes is required']);
         }
-        if ($preferences == null || count($preferences) == 0) {
+        if ($preferences == null) {
             return response()->json(['error' => 'preferences is required']);
         }
 
@@ -33,8 +33,8 @@ class GeminiController extends Controller
             . "\nParameters:"
             . "\nNumber of items: " . $numberOfItems
             . "\nOutput language: " . $language 
-            . "\nAttributes: " . implode(", ", $attributes) 
-            . "\nPreferences: " . implode(", ", $preferences);
+            . "\nAttributes: " . $attributes
+            . "\nPreferences: " . $preferences;
 
         $result = Gemini::geminiPro()->generateContent($prompt);
         $content = str_replace('```', '', $result->text());

@@ -6,6 +6,7 @@ import DashBoardMenu from "./DashBoardMenu";
 import DashBoardList from "./DashBoardList";
 import AddGoal from "./AddGoal";
 import { getBucketListItems } from "../services/bucketlist/bucketlist.service";
+import AISuggestion from "../suggestion/AISuggestion";
 
 export default function DashBoard() {
   const [user, setUser] = useState<any>(null);
@@ -83,7 +84,13 @@ export default function DashBoard() {
           </Box>
 
           <Box className="mb-6">
-            <AddGoal goals={listItems} setListItems={setListItems}/>
+            <Box className="mb-6">
+              <AddGoal goals={listItems} setListItems={setListItems}/>
+            </Box>
+
+            <Box className="mb-6">
+              <AISuggestion/>
+            </Box>
 
             <Box className="mb-6">
               <Typography fontWeight={"fontWeightBold"} variant="h6" className="font-semibold">

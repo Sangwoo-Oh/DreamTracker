@@ -45,11 +45,11 @@ class GeminiControllerTest extends TestCase
         ])->postJson('/api/gemini/suggested', [
             'numberOfItems' => 10,
             'language' => 'Japanese',
-            'attributes' => ["Male", "27 years old", "office worker", "married"],
-            'preferences' => ["Outdoors", "socializing", "overseas travel"],
+            'attributes' => "男、27歳、会社員、既婚",
+            'preferences' => "アウトドア、社交的、海外旅行"
         ]);
         
-        dump($response->getContent());
+        // dump($response->getContent());
         
         // Assert
         // AI提案のアイテムが取得されたことを確認
