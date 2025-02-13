@@ -160,8 +160,8 @@ function DashBoardListItem(props: DashBoardListItemProps) {
         ) : (
           <>
             <Box className="flex items-center justify-between">
-              <Typography fontWeight={"fontWeightBold"}>
-                {props.goal.title}
+              <Typography fontWeight={"fontWeightBold"} >
+                {props.goal.is_achieved ? <s>{props.goal.title}</s> : props.goal.title}
               </Typography>
             </Box>
             <Tooltip title="Edit">
