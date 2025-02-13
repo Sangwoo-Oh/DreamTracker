@@ -49,7 +49,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center">
       <div className="w-96">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign up</h2>
 

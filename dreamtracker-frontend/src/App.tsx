@@ -3,15 +3,15 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 
 import { Container } from "@mui/material";
-import HeaderTitle from "./Header";
+import HeaderBar from "./HeaderBar";
 import DashBoard from "./dashbord/DashBoard";
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="App bg-gray-100">
-        <Container maxWidth="xs" className="bg-white">
-          {/* <HeaderTitle /> */}
+      <div className="App">
+        <HeaderBar />
+        <Container>
           <Routes>
             <Route path="/*" element={<DashBoard />} />
             <Route path="login" element={<Login />} />

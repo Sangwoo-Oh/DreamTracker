@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router";
 import { verifyToken, signOut } from "../services/auth/auth.service";
-import { Box, Button, CircularProgress, Typography, TextField, List, ListItem } from "@mui/material";
-import DashBoardMenu from "./DashBoardMenu";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Typography,
+  Grid2,
+} from "@mui/material";
 import DashBoardList from "./DashBoardList";
 import AddGoal from "./AddGoal";
 import { getBucketListItems } from "../services/bucketlist/bucketlist.service";
@@ -68,58 +73,62 @@ export default function DashBoard() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center">
         <CircularProgress />
       </div>
     );
   }
 
   return (
-    <div className="flex justify-center h-screen">
-      <div className="w-96">
-        <h2 className="text-2xl font-bold mb-6 text-center">Dashboard</h2>
-        <Box>
-          <Box className="mb-10">
-            <Typography variant="h5">Welcome, {user?.displayName}</Typography>
-          </Box>
-
-          <Box className="mb-6">
-            <Box className="mb-6">
-              <AddGoal goals={listItems} setListItems={setListItems}/>
-            </Box>
-
-            <Box className="mb-6">
-              <AISuggestion/>
-            </Box>
-
-            <Box className="mb-6">
-              <Typography fontWeight={"fontWeightBold"} variant="h6" className="font-semibold">
-                Bucketlist Summary
-              </Typography>
-            </Box>
-
-            {/* <Routes>
-              <Route path="/" element={<DashBoardMenu user={user}/>} />
-              <Route path="/completed-goals" element={<DashBoardList goals={mockData}/>} />
-              <Route path="/total-goals" element={<DashBoardList type="total"/>} />
-            </Routes> */}
-
-            {itemsLoading ? (
-              <div className="flex justify-center items-center h-40">
-                <CircularProgress />
-              </div>
-            ) : (
-              <DashBoardList goals={listItems} setListItems={setListItems}/>
-            )}
-          </Box>
+    <Grid2 container spacing={2}>
+      <Grid2 size={6}>
+        <Box className="mb-6">
+          <Typography
+            fontWeight={"fontWeightBold"}
+            variant="h6"
+            className="font-semibold"
+          >
+            Your Bucketlist
+          </Typography>
         </Box>
+        {itemsLoading ? (
+          <div className="flex justify-center items-center h-40">
+            <CircularProgress />
+          </div>
+        ) : (
+          <DashBoardList goals={listItems} setListItems={setListItems} />
+        )}
+      </Grid2>
+      <Grid2 size={6}>
+        <div>
+          <Box>
+            <Box className="mb-10">
+              <Typography variant="h5">Welcome, {user?.displayName}</Typography>
+            </Box>
 
-        {user ? (
-          <Button fullWidth variant="contained" color="primary" onClick={handleSignOut}>
-            Sign out
-          </Button>
-        ) : null}
-      </div>
-    </div>
+            <Box className="mb-6">
+              <Box className="mb-6">
+                <AddGoal goals={listItems} setListItems={setListItems} />
+              </Box>
+
+              <Box className="mb-6">
+                <AISuggestion />
+              </Box>
+            </Box>
+          </Box>
+
+          {user ? (
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={handleSignOut}
+            >
+              Sign out
+            </Button>
+          ) : null}
+        </div>
+      </Grid2>
+    </Grid2>
   );
 }
